@@ -1,0 +1,31 @@
+package com.bobyard.comments.repository;
+
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.bobyard.comments.model.Comment;
+
+@DataJpaTest
+class CommentRepositoryTest {
+    @Autowired CommentRepository repo;
+
+    private Comment createComment() {
+        Comment c = new Comment();
+        c.setAuthor("Tester"); c.setText("hello"); c.setLikes(1);
+        return c;
+    }
+
+
+    @Test
+    public void savesAndFinds() {
+        Comment c = createComment();
+        repo.save(c);
+        assertEquals(1, repo.findAll().size());
+        assertEquals(c.getAuthor(), repo.findById(c.getId()).get().getAuthor());
+        assertEquals(c.getText(), repo.findById(c.getId()).get().getText());
+        assertEquals(c.getLikes(), repo.findById(c.getId()).get().getLikes());
+        assertEquals(c.getDate(), repo.findById(c.getId()).get().getDate());
+        assertEquals(c.getImage(), repo.findById(c.getId()).get().getImage());
+    }
+}
