@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import com.bobyard.comments.model.Comment;
 import com.bobyard.comments.model.CommentRequest;
@@ -48,7 +49,7 @@ public class CommentController {
         comment.setAuthor("Admin");
         comment.setDate(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         comment.setLikes(0);
-        comment.setImage(commentRequest.getImage());
+        comment.setImage(Optional.ofNullable(commentRequest.getImage()).orElse(""));
         return commentRepository.save(comment);
     }
 
