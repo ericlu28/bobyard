@@ -3,3 +3,6 @@ comments/data/*
 
 # IDE
 .vscode/*
+
+# Local notes
+notes.md
