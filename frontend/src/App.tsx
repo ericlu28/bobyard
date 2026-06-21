@@ -2,8 +2,9 @@ import './App.css'
 
 import { useState, useEffect } from 'react'
 import type { Comment } from './types'
-import { getComments } from './api/comments'
+import { getComments, addComment, editComment, deleteComment } from './api/comments'
 import CommentList from './components/CommentList'
+import CommentForm from './components/CommentForm'
 
 
 function App() {
@@ -28,12 +29,35 @@ function App() {
     loadComments()
   }, [])
 
+  // Each mutation calls the API and then re-fetches the list
+  async function handleAdd(text: string) {
+    await addComment(text, '')
+    await loadComments()
+  }
+
+  async function handleEdit(id: number, text: string) {
+    await editComment(id, text)
+    await loadComments()
+  }
+
+  async function handleDelete(id: number) {
+    await deleteComment(id)
+    await loadComments()
+  }
+
   return (
     <main>
       <h1>Comments</h1>
+      <CommentForm onAdd={handleAdd} />
       {loading && <p>Loading…</p>}
       {error && <p>{error}</p>}
-      {!loading && !error && <CommentList comments={comments} />}
+      {!loading && !error && (
+        <CommentList
+          comments={comments}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      )}
     </main>
   )
 }
