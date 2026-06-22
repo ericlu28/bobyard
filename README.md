@@ -3,6 +3,7 @@
 A comment system (YouTube/Reddit style) with a RESTful backend and a React frontend.
 
 - **Backend:** Java 21, Spring Boot 3, Spring Data JPA, H2 (file-based, embedded)
+- **Frontend:** React, TypeScript, Vite
 
 
 ## Project layout
@@ -10,6 +11,7 @@ A comment system (YouTube/Reddit style) with a RESTful backend and a React front
 ```
 .
 ├── comments/          # Spring Boot backend
+└── frontend/          # React + TypeScript frontend (Vite)
 ```
 
 ---
@@ -65,3 +67,25 @@ curl -X PUT localhost:8080/api/comments/1 \
 # Delete
 curl -X DELETE localhost:8080/api/comments/2
 ```
+
+---
+
+## Frontend
+
+A React + TypeScript single-page app (Vite) that lists comments and supports
+add, inline edit, and delete.
+
+### Prerequisites
+- **Node.js 18+** and npm
+
+### Run locally
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The app runs at **http://localhost:5173**.
+
+> **Note:** start the backend on port 8080 first. The Vite dev server proxies
+> `/api` requests to `http://localhost:8080` (see `vite.config.ts`), so the
+> frontend and backend run on separate ports with no CORS configuration needed.
