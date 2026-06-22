@@ -86,7 +86,10 @@ function CommentItem({ comment, onEdit, onDelete }: Props) {
               <button
                 type="button"
                 className="btn btn-outline"
-                onClick={() => setIsEditing(true)}
+                onClick={() => {
+                  setDraft(comment.text)
+                  setIsEditing(true)
+                }}
               >
                 Edit
               </button>
