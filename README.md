@@ -5,6 +5,77 @@ A comment system (YouTube/Reddit style) with a RESTful backend and a React front
 - **Backend:** Java 21, Spring Boot 3, Spring Data JPA, H2 (file-based, embedded)
 - **Frontend:** React, TypeScript, Vite
 
+---
+
+## Local development setup
+
+Follow these steps to run the full app on your machine.
+
+### Prerequisites
+
+| Requirement | Version | How to check |
+|-------------|---------|--------------|
+| **Java JDK** | 21 | `java -version` |
+| **Node.js** | 18 or newer | `node -version` |
+| **npm** | (included with Node.js) | `npm -version` |
+
+Maven does **not** need to be installed globally. The backend includes a Maven wrapper at `comments/mvnw`.  
+
+### Step 1 — Clone the repository
+
+```bash
+git clone git@github.com:ericlu28/bobyard.git
+cd bobyard
+```
+
+### Step 2 — Start the backend (Terminal 1)
+
+```bash
+cd comments
+./mvnw spring-boot:run
+```
+
+- First run downloads Maven dependencies and may take a minute.
+- Wait until the log shows the application has started (look for `Started CommentsApplication`).
+- The API is available at **http://localhost:8080**.
+
+### Step 3 — Start the frontend (Terminal 2)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+- The UI is available at **http://localhost:5173**.
+- **Start the backend first.** The Vite dev server proxies `/api` requests to `http://localhost:8080`
+
+### Step 4 — Confirm everything works
+
+1. Open **http://localhost:5173** in a browser — you should see a list of seeded comments.
+2. Try adding, editing, or deleting a comment in the UI.
+3. Optionally hit the API directly:
+
+```bash
+curl http://localhost:8080/api/comments
+```
+
+### Reset to original seed data
+
+To wipe local changes and reload the initial `comments.json` data:
+
+1. Stop the backend (`Ctrl+C` in Terminal 1).
+2. Delete the `comments/data/` folder.
+3. Start the backend again (`./mvnw spring-boot:run`).
+
+### Run backend tests (optional)
+
+```bash
+cd comments
+./mvnw test
+```
+
+---
 
 ## Project layout
 
@@ -18,28 +89,17 @@ A comment system (YouTube/Reddit style) with a RESTful backend and a React front
 
 ## Backend
 
-### Prerequisites
-- **Java 21** (JDK)
-- **Maven**: optional. A Maven wrapper (`./mvnw`) is included, so a global `mvn` is not required.
+### Database & H2 console
 
-### Run locally
-```bash
-cd comments
-mvn clean install # install dependencies
-mvn spring-boot:run        # or: ./mvnw spring-boot:run
-```
-The API runs at **http://localhost:8080**. The first run downloads dependencies and may take a minute.
-
-### Database & seed data
 - Uses **H2** persisted to a file at `comments/data/comments.mv.db`
 - On first startup, `comments.json` is automatically loaded into an empty database
   (see `DataSeeder`). Subsequent restarts keep existing data.
-- To reset to the original seed data: stop the app, delete the `comments/data/` folder, and restart.
 - **H2 console** (browse the DB in a browser): http://localhost:8080/h2-console
   - JDBC URL: `jdbc:h2:file:./data/comments`
-  - User: `sa` &nbsp;·&nbsp; Password: _(empty)_
+  - User: `sa` · Password: _(empty)_
 
 ### API
+
 Base path: `/api/comments`
 
 | Method | Path                 | Description                                  | Body                            |
@@ -52,6 +112,7 @@ Base path: `/api/comments`
 A `PUT`/`DELETE` against an unknown id returns **404**.
 
 #### Examples
+
 ```bash
 # List
 curl localhost:8080/api/comments
@@ -75,17 +136,10 @@ curl -X DELETE localhost:8080/api/comments/2
 A React + TypeScript single-page app (Vite) that lists comments and supports
 add, inline edit, and delete.
 
-### Prerequisites
-- **Node.js 18+** and npm
+During local development, run `npm run dev` from `frontend/` (see **Local development setup** above). Production build:
 
-### Run locally
 ```bash
 cd frontend
-npm install
-npm run dev
+npm run build
+npm run preview   # serves the built app locally
 ```
-The app runs at **http://localhost:5173**.
-
-> **Note:** start the backend on port 8080 first. The Vite dev server proxies
-> `/api` requests to `http://localhost:8080` (see `vite.config.ts`), so the
-> frontend and backend run on separate ports with no CORS configuration needed.
