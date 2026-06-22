@@ -78,7 +78,7 @@ public class CommentController {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public class CommentNotFoundException extends RuntimeException {
+    public static class CommentNotFoundException extends RuntimeException {
         public CommentNotFoundException(String message) {
             super(message);
         }
