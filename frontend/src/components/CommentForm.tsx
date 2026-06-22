@@ -22,7 +22,7 @@ function CommentForm({ onAdd }: Props) {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <button type="submit" className="comment-form-submit">
+      <button type="submit" className="btn btn-primary comment-form-submit">
         Add Comment
       </button>
     </form>

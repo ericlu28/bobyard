@@ -10,6 +10,7 @@ interface Props {
 function CommentItem({ comment, onEdit, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState(comment.text)
+  const [isDemolishing, setIsDemolishing] = useState(false)
 
   function handleSave() {
     onEdit(comment.id, draft)
@@ -21,8 +22,33 @@ function CommentItem({ comment, onEdit, onDelete }: Props) {
     setIsEditing(false)
   }
 
+  function handleDelete() {
+    // Respect reduced-motion: skip the demolition animation, delete immediately.
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      onDelete(comment.id)
+    } else {
+      setIsDemolishing(true) // play the wrecking-ball animation; delete on its end
+    }
+  }
+
   return (
-    <article className="comment">
+    <article
+      className={`comment ${isDemolishing ? 'demolishing' : ''}`}
+      onAnimationEnd={(e) => {
+        if (e.animationName === 'crumble') onDelete(comment.id)
+      }}
+    >
+      {isDemolishing && (
+        <div className="wrecking" aria-hidden="true">
+          <svg viewBox="0 0 60 130" width="48" height="104">
+            <line x1="30" y1="0" x2="30" y2="86" stroke="#555" strokeWidth="3" />
+            <circle cx="30" cy="104" r="20" fill="#3a3a3a" />
+            <circle cx="23" cy="97" r="6" fill="#5a5a5a" />
+          </svg>
+        </div>
+      )}
+
       <header className="comment-header">
         {comment.image && (
           <img className="comment-avatar" src={comment.image} alt={comment.author} />
@@ -48,19 +74,23 @@ function CommentItem({ comment, onEdit, onDelete }: Props) {
         <span className="comment-actions">
           {isEditing ? (
             <>
-              <button type="button" onClick={handleSave}>
+              <button type="button" className="btn btn-primary" onClick={handleSave}>
                 Save
               </button>
-              <button type="button" onClick={handleCancel}>
+              <button type="button" className="btn btn-outline" onClick={handleCancel}>
                 Cancel
               </button>
             </>
           ) : (
             <>
-              <button type="button" onClick={() => setIsEditing(true)}>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => setIsEditing(true)}
+              >
                 Edit
               </button>
-              <button type="button" onClick={() => onDelete(comment.id)}>
+              <button type="button" className="btn btn-danger" onClick={handleDelete}>
                 Delete
               </button>
             </>

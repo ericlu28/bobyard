@@ -88,3 +88,46 @@ Four typed `fetch` wrappers, all against the relative base `/api/comments`:
 4. Edit a comment's text inline → persists.
 5. Delete a comment → removed from list and DB.
 6. Confirm changes persist across a backend restart.
+
+---
+
+# Step 9: Styling + Construction Theme
+
+## Visual direction: Bold / branded
+- Plain CSS in `App.css`, driven by CSS variables (mini design system).
+- Tokens: `--accent: #0F5CFB` (Bobyard blue), `--danger: #e5484d`, `--bg: #f4f6fb`,
+  `--card: #fff`, `--text: #16182b`, `--muted: #6b7280`, `--border: #e8eaf0`,
+  `--radius: 14px`, soft accent-tinted `--shadow`. Plus construction tokens:
+  `--dozer: #f4b400` (yellow), `--dirt: #8a5a2b` (brown).
+- Rounded shadowed cards w/ hover lift, large bold heading, color-coded buttons:
+  Add/Save = filled accent, Edit/Cancel = neutral outline, Delete = danger red.
+- Buttons need classes (`btn btn-primary` / `btn-outline` / `btn-danger`) — small
+  JSX touch to CommentItem/CommentForm; everything else is pure CSS.
+- Responsive: stack footer + tighten padding under ~480px. `:focus-visible` rings.
+
+## Construction components (the fun layer)
+
+### 1. ConstructionLoader (loading state)
+- New component `ConstructionLoader.tsx`; replaces `{loading && <p>Loading…</p>}`.
+- A bulldozer (🚜 emoji v1; inline SVG = polished upgrade) drives left→right
+  pushing a growing dirt fill, looping (loading is indeterminate).
+- Mechanic: `.dozer-fill` animates `width 0%→100%`; `.dozer` animates
+  `translateX(0→trackWidth)` with the **same 2s / linear / infinite** timing so it
+  rides the fill's leading edge. Dirt = `--dirt`, accents = `--dozer`.
+- Optional: 💨 dust puff + slight engine bounce.
+
+### 2. Fallen-cone error state
+- Replaces `{error && <p>{error}</p>}`.
+- A 🚧 / traffic cone tilted "fallen" (CSS `rotate`) + message
+  "Site's down — is the backend running?" Styled in `--danger`/muted.
+
+### 3. Wrecking-ball delete
+- In `CommentItem`: add `isDemolishing` local state.
+- Click Delete → `setIsDemolishing(true)` → play a wrecking-ball swing (CSS
+  keyframes rotating a ball-on-chain across the card) + card shake/crumble (~700ms)
+  → on animation end (or timeout) call `onDelete(comment.id)` (App re-fetches).
+- Wrecking ball = inline SVG (ball + chain) since no emoji exists; swing via
+  `transform-origin` pivot + `rotate` keyframes.
+- Respect `prefers-reduced-motion` → skip animation, delete immediately.
+- Tradeoff: small delay before the real DELETE fires; if the API failed the
+  re-fetch would restore the card. Fine for a demo.

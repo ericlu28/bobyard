@@ -5,6 +5,7 @@ import type { Comment } from './types'
 import { getComments, addComment, editComment, deleteComment } from './api/comments'
 import CommentList from './components/CommentList'
 import CommentForm from './components/CommentForm'
+import ConstructionLoader from './components/ConstructionLoader'
 
 
 function App() {
@@ -49,8 +50,13 @@ function App() {
     <main>
       <h1>Comments</h1>
       <CommentForm onAdd={handleAdd} />
-      {loading && <p>Loading…</p>}
-      {error && <p>{error}</p>}
+      {loading && <ConstructionLoader />}
+      {error && (
+        <div className="site-error" role="alert">
+          <span className="site-cone">🚧</span>
+          <p>{error}</p>
+        </div>
+      )}
       {!loading && !error && (
         <CommentList
           comments={comments}

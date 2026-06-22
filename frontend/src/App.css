@@ -1,1 +1,334 @@
-/* Component styles added in step 9 */
+/* ---------- Design tokens ---------- */
+:root {
+  --accent: #0f5cfb;
+  --accent-hover: #0a48c9;
+  --danger: #e5484d;
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --text: #16182b;
+  --muted: #6b7280;
+  --border: #e8eaf0;
+  --radius: 14px;
+  --shadow: 0 4px 16px rgba(15, 92, 251, 0.08);
+
+  /* construction theme */
+  --dozer: #f4b400;
+  --dirt: #8a5a2b;
+}
+
+/* ---------- Page shell ---------- */
+body {
+  background: var(--bg);
+}
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+main > h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin: 0 0 20px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.05s;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 92, 251, 0.35);
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+.btn-outline {
+  background: #fff;
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn-danger {
+  background: #fff;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.btn-danger:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* ---------- Add form ---------- */
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+.comment-form-input,
+.comment-edit-input {
+  font: inherit;
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  background: #fff;
+}
+.comment-form-input:focus,
+.comment-edit-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(15, 92, 251, 0.12);
+}
+.comment-form-submit {
+  align-self: flex-end;
+}
+
+/* ---------- Comment list + card ---------- */
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.comment {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+.comment:hover {
+  box-shadow: 0 8px 24px rgba(15, 92, 251, 0.12);
+  transform: translateY(-2px);
+}
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.comment-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--accent);
+}
+.comment-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.comment-author {
+  font-weight: 700;
+  color: var(--text);
+}
+.comment-date {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.comment-text {
+  margin: 10px 0;
+  white-space: pre-wrap;
+  color: var(--text);
+}
+.comment-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+.comment-likes {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.comment-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------- States ---------- */
+.comments-empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* ---------- ConstructionLoader ---------- */
+.dozer-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 0;
+}
+.dozer-scene {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  height: 44px;
+}
+.dozer-fill {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--dirt);
+  animation: dozer-fill 2.2s linear infinite;
+}
+.dozer {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  font-size: 30px;
+  line-height: 1;
+  transform: scaleX(-1); /* face the driving direction (right) */
+  animation: dozer-drive 2.2s linear infinite;
+}
+.dozer-ground {
+  width: 100%;
+  max-width: 320px;
+  border-top: 2px dashed var(--border);
+}
+.dozer-text {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+@keyframes dozer-drive {
+  from {
+    left: 0;
+  }
+  to {
+    left: calc(100% - 30px);
+  }
+}
+@keyframes dozer-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* ---------- Fallen-cone error ---------- */
+.site-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 32px 0;
+  color: var(--danger);
+}
+.site-cone {
+  font-size: 44px;
+  line-height: 1;
+  display: inline-block;
+  transform: rotate(78deg); /* knocked over */
+}
+
+/* ---------- Wrecking-ball delete ---------- */
+.comment.demolishing {
+  animation: crumble 0.7s ease-in forwards;
+  pointer-events: none;
+}
+.wrecking {
+  position: absolute;
+  top: -8px;
+  right: 28px;
+  transform-origin: top center;
+  pointer-events: none;
+  animation: swing 0.7s ease-in;
+}
+@keyframes swing {
+  0% {
+    transform: rotate(-72deg);
+  }
+  60% {
+    transform: rotate(12deg);
+  }
+  80% {
+    transform: rotate(-6deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes crumble {
+  0% {
+    transform: translateX(0) rotate(0);
+    opacity: 1;
+  }
+  15% {
+    transform: translateX(-6px) rotate(-1deg);
+  }
+  30% {
+    transform: translateX(6px) rotate(1deg);
+  }
+  45% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(48px) rotate(4deg) scale(0.92);
+    opacity: 0;
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  main {
+    padding: 20px 12px 48px;
+  }
+  .comment-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .dozer,
+  .dozer-fill,
+  .comment.demolishing,
+  .wrecking {
+    animation: none;
+  }
+  .comment:hover {
+    transform: none;
+  }
+}
